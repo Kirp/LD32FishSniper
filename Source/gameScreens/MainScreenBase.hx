@@ -1,11 +1,13 @@
 package gameScreens;
 
+import camera.CameraBase;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.geom.Point;
 import openfl.ui.Keyboard;
 import stages.PlayStageFishBase;
+import utilities.ConstantHolder;
 
 /**
  * ...
@@ -15,6 +17,7 @@ class MainScreenBase extends Sprite
 {
 	var myBG:Sprite;
 	var fishStage:PlayStageFishBase;
+	var camera:CameraBase;
 
 	public function new() 
 	{
@@ -32,7 +35,7 @@ class MainScreenBase extends Sprite
 		//lets load up a bg
 		myBG = new Sprite();
 		myBG.graphics.beginFill(0x303030);
-		myBG.graphics.drawRect(0, 0, 800, 600);
+		myBG.graphics.drawRect(0, 0, ConstantHolder.appWidth, ConstantHolder.appHeight);
 		myBG.graphics.endFill();
 		
 		addChild(myBG);
@@ -48,12 +51,19 @@ class MainScreenBase extends Sprite
 		
 		
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		
+		
+		
+		
 	}
 	
 	private function onEnterFrame(e:Event):Void 
 	{
 		//trace("step");
 		fishStage.GameStep();
+		var offsetToCamera = fishStage.camera.reportOffsetToMain();
+		fishStage.x = offsetToCamera.x*-1;
+		
 	}
 	
 	private function onKeyUp(e:KeyboardEvent):Void 
@@ -65,12 +75,12 @@ class MainScreenBase extends Sprite
 	{
 		if (e.keyCode == Keyboard.A)
 		{
-			fishStage.x -= 10;
+			//fishStage.x -= 10;
 		}
 		
 		if (e.keyCode == Keyboard.D)
 		{
-			fishStage.x += 10;
+			//fishStage.x += 10;
 		}
 		
 		if (e.keyCode == Keyboard.SPACE)

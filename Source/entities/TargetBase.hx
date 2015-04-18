@@ -1,5 +1,6 @@
 package entities;
 import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 
 /**
  * ...
@@ -9,6 +10,7 @@ class TargetBase extends Sprite
 {
 
 	var myPortrait:Sprite;
+	var myHitbox:Rectangle;
 
 	public function new(_x:Float, _y:Float) 
 	{
@@ -16,6 +18,8 @@ class TargetBase extends Sprite
 		
 		this.x = _x;
 		this.y = _y;
+		
+		myHitbox = new Rectangle(0,0,25,25);
 	}
 	
 	public function StartUp()
@@ -26,6 +30,11 @@ class TargetBase extends Sprite
 		myPortrait.graphics.drawRect(0,0,25,25);
 		myPortrait.graphics.endFill();
 		addChild(myPortrait);
+	}
+	
+	public function returnHitBox():Rectangle
+	{
+		return new Rectangle(this.x, this.y, myHitbox.width, myHitbox.height);
 	}
 	
 }

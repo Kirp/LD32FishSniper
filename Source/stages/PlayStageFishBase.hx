@@ -1,9 +1,11 @@
 package stages;
 
+import camera.CameraBase;
 import entities.PlayerBase;
 import entities.TargetBase;
 import entities.ThrownFishBase;
 import openfl.geom.Point;
+import utilities.ConstantHolder;
 
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
@@ -23,6 +25,7 @@ class PlayStageFishBase extends Sprite
 	
 	private var bulletFish:ThrownFishBase;
 	
+	public var camera:CameraBase;
 	
 	private var RunGameLoop:Bool = false;
 	
@@ -34,7 +37,7 @@ class PlayStageFishBase extends Sprite
 	
 	public function StartUp()
 	{
-		tempStageRect = new Rectangle(0,0, 1800, 600);
+		tempStageRect = new Rectangle(0,0, ConstantHolder.appWidth*3, ConstantHolder.appHeight);
 		
 		
 		stageBG = new Sprite();
@@ -57,7 +60,10 @@ class PlayStageFishBase extends Sprite
 		addChild(bulletFish);
 		bulletFish.StartUp();
 		
-		
+		camera = new CameraBase(0, 0);
+		camera.StartUp();
+		addChild(camera);
+		camera.setTarget(bulletFish);
 		
 		RunGameLoop = true;
 	}
@@ -65,13 +71,14 @@ class PlayStageFishBase extends Sprite
 	public function GameStep()
 	{
 		bulletFish.GameStep();
+		camera.followTarget();
 	}
 	
 	public function ControlMovement(toControl:Point)
 	{
-		if (toControl.y < 0) bulletFish.moveUp();
+		if (toControl.y < 0) bulletFish.moveDown();
 		
-		if (toControl.y > 0) bulletFish.moveDown();
+		if (toControl.y > 0) bulletFish.moveUp();
 		
 	}
 	

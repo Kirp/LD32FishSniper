@@ -11,13 +11,15 @@ class ThrownFishBase extends Sprite
 
 	var myPortrait:Sprite;
 	
-	private var velocity:Point;
+	public var velocity:Point;
 	
 	private var speed:Float;
 	
 	private var currentAngleRadians:Float = 0;
 	
-	private var turnSpeed:Float = 0.05;
+	private var turnSpeed:Float = 0.05; 
+	
+	public var isFlying:Bool = true;
 
 	public function new(_x:Float, _y:Float) 
 	{
@@ -26,8 +28,8 @@ class ThrownFishBase extends Sprite
 		this.x = _x;
 		this.y = _y;
 		
-		velocity = new Point(1, 0);
-		speed = 1;
+		velocity = new Point(0, 0);
+		speed = 5;
 	}
 	
 	public function StartUp()
@@ -48,6 +50,8 @@ class ThrownFishBase extends Sprite
 		var movePoint:Point = new Point(speed * Math.cos(currentAngleRadians), speed * Math.sin(currentAngleRadians));
 		this.x += movePoint.x;
 		this.y += movePoint.y;
+		
+		velocity = movePoint;
 		
 		myPortrait.rotation = currentAngleRadians * 180/Math.PI;
 	}
