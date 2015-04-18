@@ -3,6 +3,8 @@ package stages;
 import entities.PlayerBase;
 import entities.TargetBase;
 import entities.ThrownFishBase;
+import openfl.geom.Point;
+
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
 
@@ -63,6 +65,14 @@ class PlayStageFishBase extends Sprite
 	public function GameStep()
 	{
 		bulletFish.GameStep();
+	}
+	
+	public function ControlMovement(toControl:Point)
+	{
+		if (toControl.y < 0) bulletFish.moveUp();
+		
+		if (toControl.y > 0) bulletFish.moveDown();
+		
 	}
 	
 }

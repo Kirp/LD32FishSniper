@@ -3,6 +3,7 @@ package gameScreens;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
+import openfl.geom.Point;
 import openfl.ui.Keyboard;
 import stages.PlayStageFishBase;
 
@@ -76,6 +77,17 @@ class MainScreenBase extends Sprite
 		{
 			trace("fire");
 		}
+		
+		if (e.keyCode == Keyboard.W)
+		{
+			fishStage.ControlMovement(new Point(0,-1));
+		}
+		
+		if (e.keyCode == Keyboard.S)
+		{
+			fishStage.ControlMovement(new Point(0,1));
+		}
+		
 	}
 	
 }
