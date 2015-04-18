@@ -1,6 +1,7 @@
 package;
 
 
+import gameScreens.MainScreenBase;
 import openfl.display.Sprite;
 
 
@@ -12,6 +13,8 @@ class Main extends Sprite {
 		super ();
 		
 		
+		
+		addChild(new MainScreenBase());
 		
 	}
 	
