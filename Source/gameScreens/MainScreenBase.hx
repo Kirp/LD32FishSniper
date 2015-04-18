@@ -7,6 +7,7 @@ import openfl.events.KeyboardEvent;
 import openfl.geom.Point;
 import openfl.ui.Keyboard;
 import stages.PlayStageFishBase;
+import usables.JoystickMock;
 import utilities.ConstantHolder;
 
 /**
@@ -19,6 +20,8 @@ class MainScreenBase extends Sprite
 	var fishStage:PlayStageFishBase;
 	var camera:CameraBase;
 
+	var joy1:JoystickMock;
+	
 	public function new() 
 	{
 		super();
@@ -31,6 +34,8 @@ class MainScreenBase extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 		
 		trace("GUI screen loaded");
+		
+		joy1 = new JoystickMock();
 		
 		//lets load up a bg
 		myBG = new Sprite();
@@ -60,15 +65,26 @@ class MainScreenBase extends Sprite
 	private function onEnterFrame(e:Event):Void 
 	{
 		//trace("step");
+		fishStage.ControlMovement(joy1.getCurretDirection());
 		fishStage.GameStep();
 		var offsetToCamera = fishStage.camera.reportOffsetToMain();
 		fishStage.x = offsetToCamera.x*-1;
+		
 		
 	}
 	
 	private function onKeyUp(e:KeyboardEvent):Void 
 	{
+		if (e.keyCode == Keyboard.W)
+		{
+			//fishStage.ControlMovement(new Point(0, -1));
+			joy1.ReleasedTrigger(new Point(0,-1));
+		}
 		
+		if (e.keyCode == Keyboard.S)
+		{
+			joy1.ReleasedTrigger(new Point(0,1));
+		}
 	}
 	
 	private function onKeyDown(e:KeyboardEvent):Void 
@@ -90,12 +106,13 @@ class MainScreenBase extends Sprite
 		
 		if (e.keyCode == Keyboard.W)
 		{
-			fishStage.ControlMovement(new Point(0,-1));
+			//fishStage.ControlMovement(new Point(0, -1));
+			joy1.PressedTrigger(new Point(0,-1));
 		}
 		
 		if (e.keyCode == Keyboard.S)
 		{
-			fishStage.ControlMovement(new Point(0,1));
+			joy1.PressedTrigger(new Point(0,1));
 		}
 		
 	}
