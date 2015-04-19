@@ -34,7 +34,7 @@ class CameraBase extends Sprite
 	{
 		
 		myPortrait = new Sprite();
-		myPortrait.graphics.beginFill(0x303030,0.5);
+		myPortrait.graphics.beginFill(0x303030,0);
 		myPortrait.graphics.drawRect(0,0,ConstantHolder.appWidth,ConstantHolder.appHeight);
 		myPortrait.graphics.endFill();
 		addChild(myPortrait);

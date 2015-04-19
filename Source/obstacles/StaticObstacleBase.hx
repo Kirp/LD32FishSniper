@@ -27,7 +27,7 @@ class StaticObstacleBase extends Sprite
 	{
 		
 		myPortrait = new Sprite();
-		myPortrait.graphics.beginFill(0xffffff);
+		myPortrait.graphics.beginFill(0xA52A2A);
 		myPortrait.graphics.drawRect(0,0,myHitbox.width,myHitbox.height);
 		myPortrait.graphics.endFill();
 		addChild(myPortrait);

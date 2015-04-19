@@ -1,4 +1,6 @@
 package entities;
+import openfl.Assets;
+import openfl.display.Bitmap;
 import openfl.display.Sprite;
 
 /**
@@ -8,6 +10,7 @@ import openfl.display.Sprite;
 class PlayerBase extends Sprite
 {
 	var myPortrait:Sprite;
+	var myPix:Bitmap;
 
 	public function new(_x:Float, _y:Float) 
 	{
@@ -25,5 +28,11 @@ class PlayerBase extends Sprite
 		myPortrait.graphics.drawRect(0,0,25,25);
 		myPortrait.graphics.endFill();
 		addChild(myPortrait);
+		
+		myPix = new Bitmap(Assets.getBitmapData ("assets/pictures/Abro.png"));
+		myPix.x = -10;
+		myPix.y = 0;
+		myPortrait.addChild(myPix);
+		
 	}
 }

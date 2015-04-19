@@ -3,6 +3,7 @@ package stages;
 import camera.CameraBase;
 import entities.FishBobber;
 import entities.PlayerBase;
+import entities.SpentFishBase;
 import entities.TargetBase;
 import entities.ThrownFishBase;
 import openfl.events.TimerEvent;
@@ -47,8 +48,9 @@ class PlayStageFishBase extends Sprite
 	
 	public var fishDown:Bool = true;
 	
-	
 	private var fishBiteRoller:Timer;
+	
+	private var animateControl:Timer;
 	
 	public function new() 
 	{
@@ -112,6 +114,8 @@ class PlayStageFishBase extends Sprite
 	
 	private function onBiteTick(e:TimerEvent):Void 
 	{
+		bulletFish.swapPic();
+		
 		if (bobBait == null && bobBait.isEnabled==false) return;
 		
 		if (bobBait.hasBite == false)
@@ -236,6 +240,18 @@ class PlayStageFishBase extends Sprite
 		return false;
 	}
 	
+	function checkIfFishIsOutOfBounds():Bool
+	{
+		if (!tools.checkIfPointInRectangle(bulletFish.getCenter, tempStageRect))
+		{
+			return true;
+		}
+		
+		return false;
+		return false;
+		return false;
+	}
+	
 	public function GameStep()
 	{
 		if (fishDown) return;
@@ -247,9 +263,23 @@ class PlayStageFishBase extends Sprite
 		
 		if (fishDown)
 		{
+			if (bulletFish.isAtReset == false)
+			{
+				
+				spawnDeadFishAtPosition(bulletFish.x, bulletFish.y, bulletFish.currentAngleRadians);
+				bulletFish.hideAway();
+			}
 			camera.resetPosition();
 			if(bobBait.isEnabled==false)bobBait.enableBob();
 		}
+	}
+	
+	function spawnDeadFishAtPosition(_x:Float, _y:Float, _angle:Float) 
+	{
+		var deadFish = new SpentFishBase(_x, _y, _angle);
+		deadFish.StartUp();
+		//maybe add this alll later in an array for easy fixing
+		addChild(deadFish);
 	}
 	
 	public function shootFish():Void
@@ -266,6 +296,8 @@ class PlayStageFishBase extends Sprite
 		fishDown = false;
 		
 		bobBait.disableBob();
+		
+		//fishBiteRoller.stop();
 	}
 	
 	public function ControlMovement(toControl:Point)

@@ -1,7 +1,12 @@
 package entities;
+import openfl.Assets;
+import openfl.display.Bitmap;
+import openfl.display.BitmapDataChannel;
 import openfl.display.Sprite;
+import openfl.events.TimerEvent;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import openfl.utils.Timer;
 
 /**
  * ...
@@ -13,15 +18,27 @@ class ThrownFishBase extends Sprite
 	var myPortrait:Sprite;
 	var myHitbox:Rectangle;
 	
+	var myPix:Bitmap;
+	var fish1:Bitmap;
+	var fish2:Bitmap;
+	
+	private var animTimer:Timer;
+	
 	public var velocity:Point;
 	
 	private var speed:Float;
 	
-	private var currentAngleRadians:Float = 0;
+	public var currentAngleRadians:Float = 0;
 	
 	private var turnSpeed:Float = 0.1; 
 	
 	public var isFlying:Bool = true;
+	
+	private var initialState:Bool = false;
+	
+	public var resetSpawnPosition:Point;
+	
+	public var isAtReset:Bool = false;
 
 	public function new(_x:Float, _y:Float) 
 	{
@@ -32,6 +49,8 @@ class ThrownFishBase extends Sprite
 		
 		velocity = new Point(0, 0);
 		speed = 3;
+		
+		resetSpawnPosition = new Point(_x, _y);
 	}
 	
 	public function StartUp()
@@ -39,10 +58,20 @@ class ThrownFishBase extends Sprite
 		myHitbox = new Rectangle(0,0,30,10);
 		
 		myPortrait = new Sprite();
-		myPortrait.graphics.beginFill(0x0000ff);
-		myPortrait.graphics.drawRect(-20,-5,30,10);
-		myPortrait.graphics.endFill();
+		//myPortrait.graphics.beginFill(0x0000ff);
+		//myPortrait.graphics.drawRect(-20,-5,30,10);
+		//myPortrait.graphics.endFill();
 		addChild(myPortrait);
+		
+		fish1 = new Bitmap(Assets.getBitmapData ("assets/pictures/fish1A.png"));
+		fish2 = new Bitmap(Assets.getBitmapData ("assets/pictures/fish1B.png"));
+		
+		
+		myPix = fish2;
+		myPix.x = -20;
+		myPix.y = -5;
+		myPortrait.addChild(myPix);
+		
 		
 		
 		
@@ -52,11 +81,21 @@ class ThrownFishBase extends Sprite
 		hitVisual.graphics.endFill();
 		addChild(hitVisual);
 		
+		//animTimer = new Timer(1000);
+		//animTimer.addEventListener(TimerEvent.TIMER, onTick);
+		//animTimer.start();
+		
+	}
+	
+	private function onTick(e:TimerEvent):Void 
+	{
+		swapPic();
 	}
 	
 	public function resetMe():Void
 	{
 		currentAngleRadians = 0;
+		isAtReset = false;
 	}
 	
 	public function GameStep()
@@ -71,6 +110,7 @@ class ThrownFishBase extends Sprite
 		velocity = movePoint;
 		
 		myPortrait.rotation = currentAngleRadians * 180 / Math.PI;
+		//myPix.rotation = currentAngleRadians * 180 / Math.PI;
 		
 		
 	}
@@ -110,4 +150,23 @@ class ThrownFishBase extends Sprite
 		return new Point(this.x, this.y);
 	}
 	
+	public function hideAway()
+	{
+		this.x = resetSpawnPosition.x;
+		this.y = resetSpawnPosition.y;
+		isAtReset = true;
+	}
+	
+	public function swapPic():Void
+	{
+		if (initialState)
+		{
+			myPix = fish1;
+			initialState = false;
+		}else
+			{
+				myPix = fish2;
+				initialState = true;
+			}
+	}
 }
