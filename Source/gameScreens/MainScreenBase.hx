@@ -3,6 +3,7 @@ package gameScreens;
 import camera.CameraBase;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
+import stages.TitleScreen;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -31,7 +32,9 @@ class MainScreenBase extends Sprite
 	var CountDown:Timer;
 	var countTime:Int = 200;
 	
-	var gameRunning:Bool = true;
+	var gameRunning:Bool = false;
+	
+	var titleScreen:TitleScreen;
 	
 	public function new() 
 	{
@@ -59,24 +62,21 @@ class MainScreenBase extends Sprite
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown); 
 		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		
-		
-		
-		
-		addChild(fishStage = new PlayStageFishBase());
-		fishStage.StartUp();
-		
-		
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		
 		
 		TimeDisplay = new TextChatter(10, 10);
 		TimeDisplay.StartUp();
-		TimeDisplay.sayText("yabadaba");
+		TimeDisplay.sayText("Get Ready!");
+		TimeDisplay.visible = false;
 		addChild(TimeDisplay);
 		
 		CountDown = new Timer(1000);
 		CountDown.addEventListener(TimerEvent.TIMER, onTick);
-		CountDown.start();
+		
+		titleScreen = new TitleScreen();
+		titleScreen.StartUp();
+		addChild(titleScreen);
 		
 	}
 	
@@ -84,9 +84,40 @@ class MainScreenBase extends Sprite
 	{
 		if (gameRunning)
 		{
-			TimeDisplay.sayText(Std.string(countTime));
+			if (countTime < 0)
+			{
+				//lets end the game and call it a game over
+				//declare a game over here and stop the game
+				
+				trace("game over");
+				gameRunning = false;
+				return;
+			}
+			
+			if (fishStage.goalAchieved)
+			{
+				gameRunning = false;
+				trace("declare a win!");
+			}
+			
+			if (fishStage.penalizeTime)
+			{
+				countTime -= 20;
+				
+			}
+			
+			var sayThis:String = Std.string(countTime)+ " Seconds";
+			TimeDisplay.sayText(sayThis);
 			countTime--;
 		}
+	}
+	
+	private function RunGame():Void
+	{
+		TimeDisplay.visible = true;
+		addChild(fishStage = new PlayStageFishBase());
+		fishStage.StartUp();
+		CountDown.start();
 	}
 	
 	private function onEnterFrame(e:Event):Void 

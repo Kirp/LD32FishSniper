@@ -16,8 +16,12 @@ class TextDisplay extends Sprite
 	var myTextField:TextField;
 	
 	var toDisplayText:String;
+	
+	public var fontSize:Float = 25;
+	
+	var defaultTextWidth:Float = 500;
 
-	public function new(toSay:String, _x:Float, _y:Float) 
+	public function new(toSay:String, _x:Float, _y:Float, _fontSize:Float = 25) 
 	{
 		super();
 		
@@ -25,6 +29,8 @@ class TextDisplay extends Sprite
 		this.y = _y;
 		
 		toDisplayText = toSay;
+		
+		fontSize = _fontSize;
 		
 		startDisplay();
 	}
@@ -34,7 +40,7 @@ class TextDisplay extends Sprite
 	{
 		myFont = Assets.getFont("assets/fonts/ARCADECLASSIC.TTF");
 		
-		var format = new TextFormat (myFont.fontName, 25, 0xFFFFFF);
+		var format = new TextFormat (myFont.fontName, fontSize, 0xFFFFFF);
 		myTextField = new TextField ();
 		
 		myTextField.defaultTextFormat = format;
@@ -42,7 +48,7 @@ class TextDisplay extends Sprite
 		myTextField.selectable = false;
 		
 		
-		myTextField.width = 200;
+		myTextField.width = defaultTextWidth;
 		
 		myTextField.text = toDisplayText;
 		

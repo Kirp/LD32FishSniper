@@ -13,7 +13,7 @@ class TargetBase extends Sprite
 
 	var myPortrait:Sprite;
 	var myHitbox:Rectangle;
-	var myType:Int;
+	public var myType:Int;
 	
 	var myPix:Bitmap;
 
@@ -38,6 +38,7 @@ class TargetBase extends Sprite
 		addChild(myPortrait);
 		
 		myPix = getBitmapByType();
+		myPix.x = -4;
 		myPortrait.addChild(myPix);
 		
 	}

@@ -34,6 +34,15 @@ class PlayStageFishBase extends Sprite
 	private var player:PlayerBase; 
 	private var target:TargetBase;
 	
+	private var targetA:TargetBase;
+	private var targetB:TargetBase;
+	private var targetC:TargetBase;
+	private var targetD:TargetBase;
+	
+	private var targetList:Array<TargetBase>;
+	
+	private var currentTargetType:Int;
+	
 	private var bobBait:FishBobber;
 	
 	private var bulletFish:ThrownFishBase;
@@ -52,6 +61,9 @@ class PlayStageFishBase extends Sprite
 	
 	private var animateControl:Timer;
 	
+	public var goalAchieved:Bool = false;
+	public var penalizeTime:Bool = false;
+	
 	public function new() 
 	{
 		super();
@@ -63,6 +75,7 @@ class PlayStageFishBase extends Sprite
 		//init
 		tools = new Vtools();
 		obstacleList = [];
+		targetList = [];
 		
 		
 		tempStageRect = new Rectangle(0,0, ConstantHolder.appWidth*mapLengthMultiplier, ConstantHolder.appHeight);
@@ -87,6 +100,29 @@ class PlayStageFishBase extends Sprite
 		addChild(target);
 		target.StartUp();
 		
+		
+		targetA = new TargetBase(150, 80,0);
+		addChild(targetA);
+		targetA.StartUp();
+		targetList.push(targetA);
+		
+		targetB = new TargetBase(150, 200,1);
+		addChild(targetB);
+		targetB.StartUp();
+		targetList.push(targetB);
+		
+		targetC = new TargetBase(150, 330,2);
+		addChild(targetC);
+		targetC.StartUp();
+		targetList.push(targetC);
+		
+		targetD = new TargetBase(150, 450,3);
+		addChild(targetD);
+		targetD.StartUp();
+		targetList.push(targetD);
+		
+		
+		
 		bobBait = new FishBobber(50,300);
 		bobBait.StartUp();
 		addChild(bobBait);
@@ -105,6 +141,9 @@ class PlayStageFishBase extends Sprite
 		//AddObstacles();
 		addObstaclesBySection();
 		
+		//lets get our random target color
+		currentTargetType = getRandomTargetType();
+		trace("current target is type: "+currentTargetType);
 		
 		//fishbaittimer
 		fishBiteRoller = new Timer(3000);
@@ -130,6 +169,14 @@ class PlayStageFishBase extends Sprite
 				}
 			}
 		
+	}
+	
+	private function getRandomTargetType():Int
+	{
+		var currentTargetType = Math.floor(Math.random() * 4);
+		if (currentTargetType > 3) currentTargetType = 3;
+		
+		return currentTargetType;
 	}
 	
 	private function isFishBiting():Bool
@@ -250,6 +297,23 @@ class PlayStageFishBase extends Sprite
 		return false;
 	}
 	
+	function checkIfFishIsHittingTargets():Point
+	{
+		var unConventionalUse:Point = new Point(0,0);
+		for (target in targetList)
+		{
+			if (tools.checkIfPointInRectangle(bulletFish.getCenter(), target.returnHitBox()))
+			{
+				unConventionalUse.x = 1;
+				unConventionalUse.y = target.myType;
+			}
+			
+			if (unConventionalUse.x == 1) return unConventionalUse;
+		}
+		
+		return unConventionalUse;
+	}
+	
 	public function GameStep()
 	{
 		if (fishDown) return;
@@ -258,6 +322,21 @@ class PlayStageFishBase extends Sprite
 		camera.followTarget();
 		fishDown = (checkIfFishIsHittingBarriers()||checkIfFishIsOutOfBounds());
 		//fishDown = checkIfFishIsOutOfBounds();
+		
+		var checkIfGameOver:Point = checkIfFishIsHittingTargets();
+		if (checkIfGameOver.x == 1)
+		{
+			if (checkIfGameOver.y == currentTargetType)
+			{
+				trace("Hitting correct target");
+				trace("you win!");
+				goalAchieved = true;
+				return;
+			}
+			trace("hitting a target but incorrect");
+			penalizeTime = true;
+			fishDown = true;
+		}
 		
 		if (fishDown)
 		{

@@ -30,7 +30,7 @@ class PlayerBase extends Sprite
 		addChild(myPortrait);
 		
 		myPix = new Bitmap(Assets.getBitmapData ("assets/pictures/Abro.png"));
-		myPix.x = -10;
+		myPix.x = -4;
 		myPix.y = 0;
 		myPortrait.addChild(myPix);
 		
