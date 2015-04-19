@@ -3,6 +3,8 @@ package gameScreens;
 import camera.CameraBase;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
+import stages.GameOverScreen;
+import stages.IntroScreen;
 import stages.TitleScreen;
 
 import openfl.display.Sprite;
@@ -36,6 +38,11 @@ class MainScreenBase extends Sprite
 	
 	var titleScreen:TitleScreen;
 	
+	var intro:IntroScreen;
+	var gameover:GameOverScreen;
+	
+	var gameState:Int = 0;
+	
 	public function new() 
 	{
 		super();
@@ -68,7 +75,7 @@ class MainScreenBase extends Sprite
 		TimeDisplay = new TextChatter(10, 10);
 		TimeDisplay.StartUp();
 		TimeDisplay.sayText("Get Ready!");
-		TimeDisplay.visible = false;
+		TimeDisplay.visible = true;
 		addChild(TimeDisplay);
 		
 		CountDown = new Timer(1000);
@@ -77,7 +84,19 @@ class MainScreenBase extends Sprite
 		titleScreen = new TitleScreen();
 		titleScreen.StartUp();
 		addChild(titleScreen);
+		//titleScreen.visible = false;
 		
+		intro = new IntroScreen();
+		intro.StartUp();
+		addChild(intro);
+		intro.visible = false;
+		
+		gameover = new GameOverScreen(true);
+		gameover.StartUp();
+		addChild(gameover);
+		gameover.visible = false;
+		
+		gameState = 0;
 	}
 	
 	private function onTick(e:TimerEvent):Void 
@@ -91,6 +110,7 @@ class MainScreenBase extends Sprite
 				
 				trace("game over");
 				gameRunning = false;
+				NextScreen();
 				return;
 			}
 			
@@ -98,6 +118,8 @@ class MainScreenBase extends Sprite
 			{
 				gameRunning = false;
 				trace("declare a win!");
+				NextScreen();
+				return;
 			}
 			
 			if (fishStage.penalizeTime)
@@ -114,6 +136,7 @@ class MainScreenBase extends Sprite
 	
 	private function RunGame():Void
 	{
+		if (fishStage != null) fishStage = null;
 		TimeDisplay.visible = true;
 		addChild(fishStage = new PlayStageFishBase());
 		fishStage.StartUp();
@@ -149,6 +172,7 @@ class MainScreenBase extends Sprite
 	
 	private function onKeyDown(e:KeyboardEvent):Void 
 	{
+		
 		if (e.keyCode == Keyboard.A)
 		{
 			//fishStage.x -= 10;
@@ -162,10 +186,20 @@ class MainScreenBase extends Sprite
 		if (e.keyCode == Keyboard.SPACE)
 		{
 			trace("fire");
-			if (fishStage.fishDown)
+			if (gameRunning)
 			{
-				fishStage.shootFish();
-			}
+				if (fishStage.fishDown)
+				{
+					fishStage.shootFish();
+				}
+			}else
+				if(gameState==2){
+					gameRunning = true;
+					
+				}else
+					{
+						NextScreen();	
+					}
 		}
 		
 		if (e.keyCode == Keyboard.W)
@@ -179,6 +213,45 @@ class MainScreenBase extends Sprite
 			joy1.PressedTrigger(new Point(0,1));
 		}
 		
+	}
+	
+	private function NextScreen():Void
+	{
+		switch(gameState)
+		{
+			case 0:
+				titleScreen.visible = false;
+				intro.visible = true;
+				gameState = 1;
+				
+			case 1:
+				intro.visible = false;
+				TimeDisplay.visible = true;
+				RunGame();
+				gameState = 2;
+				countTime = 200;
+				
+			case 2:
+				fishStage.visible = false;
+				TimeDisplay.visible = false;
+				gameover.visible = true;
+				gameover.winGame(fishStage.goalAchieved);
+				CountDown.stop();
+				gameState = 3;
+				
+			case 3:
+				
+				gameover.visible = false;
+				
+				RunGame();
+				gameState = 2;
+				countTime = 200;
+				
+			default:
+				titleScreen.visible = false;
+				intro.visible = true;
+				gameState = 1;
+		}
 	}
 	
 }

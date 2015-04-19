@@ -8,6 +8,8 @@ import utilities.ConstantHolder;
  * ...
  * @author ...
  */
+
+//placeholder
 class TitleScreen extends Sprite
 {
 	
@@ -35,10 +37,10 @@ class TitleScreen extends Sprite
 		addChild(TitleText1);
 		trace(TitleText1.width);
 		
-		var startPrompt:TextDisplay = new TextDisplay("press  Space  to  start", 200, 300, 25);
+		var startPrompt:TextDisplay = new TextDisplay("press  Space  to  start", 260, 420, 25);
 		addChild(startPrompt);
 		
-		var OwnerText:TextDisplay = new TextDisplay("LD32  Game  by Vrian Candelaria", 10, ConstantHolder.appHeight - 50, 15);
+		var OwnerText:TextDisplay = new TextDisplay("LD32  Game  by Vrian Candelaria", 10, ConstantHolder.appHeight - 20, 15);
 		addChild(OwnerText);
 		
 		

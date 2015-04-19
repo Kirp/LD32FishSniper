@@ -101,22 +101,22 @@ class PlayStageFishBase extends Sprite
 		target.StartUp();
 		
 		
-		targetA = new TargetBase(150, 80,0);
+		targetA = new TargetBase(tempStageRect.width - 35, 80,0);
 		addChild(targetA);
 		targetA.StartUp();
 		targetList.push(targetA);
 		
-		targetB = new TargetBase(150, 200,1);
+		targetB = new TargetBase(tempStageRect.width - 35, 200,1);
 		addChild(targetB);
 		targetB.StartUp();
 		targetList.push(targetB);
 		
-		targetC = new TargetBase(150, 330,2);
+		targetC = new TargetBase(tempStageRect.width - 35, 330,2);
 		addChild(targetC);
 		targetC.StartUp();
 		targetList.push(targetC);
 		
-		targetD = new TargetBase(150, 450,3);
+		targetD = new TargetBase(tempStageRect.width - 35, 450,3);
 		addChild(targetD);
 		targetD.StartUp();
 		targetList.push(targetD);
@@ -331,6 +331,7 @@ class PlayStageFishBase extends Sprite
 				trace("Hitting correct target");
 				trace("you win!");
 				goalAchieved = true;
+				fishDown = true;
 				return;
 			}
 			trace("hitting a target but incorrect");
@@ -382,6 +383,11 @@ class PlayStageFishBase extends Sprite
 		if (toControl.y < 0) bulletFish.moveDown();
 		
 		if (toControl.y > 0) bulletFish.moveUp();
+		
+	}
+	
+	public function InitialGameStart()
+	{
 		
 	}
 	
