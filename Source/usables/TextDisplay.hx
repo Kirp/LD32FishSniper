@@ -1,4 +1,4 @@
-package game.usables;
+package usables;
 import flash.display.Sprite;
 import flash.text.Font;
 import flash.text.TextField;
@@ -34,7 +34,7 @@ class TextDisplay extends Sprite
 	{
 		myFont = Assets.getFont("assets/fonts/ARCADECLASSIC.TTF");
 		
-		var format = new TextFormat (myFont.fontName, 5, 0xFFFFFF);
+		var format = new TextFormat (myFont.fontName, 25, 0xFFFFFF);
 		myTextField = new TextField ();
 		
 		myTextField.defaultTextFormat = format;
@@ -42,11 +42,16 @@ class TextDisplay extends Sprite
 		myTextField.selectable = false;
 		
 		
-		myTextField.width = 10;
+		myTextField.width = 200;
 		
 		myTextField.text = toDisplayText;
 		
 		addChild (myTextField);
+	}
+	
+	public function say(toSay:String)
+	{
+		myTextField.text = toSay;
 	}
 	
 }

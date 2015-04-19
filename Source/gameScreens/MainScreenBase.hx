@@ -1,12 +1,16 @@
 package gameScreens;
 
 import camera.CameraBase;
+import openfl.events.TimerEvent;
+import openfl.utils.Timer;
+
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.geom.Point;
 import openfl.ui.Keyboard;
 import stages.PlayStageFishBase;
+import uiComponents.TextChatter;
 import usables.JoystickMock;
 import utilities.ConstantHolder;
 
@@ -14,6 +18,7 @@ import utilities.ConstantHolder;
  * ...
  * @author ...
  */
+
 class MainScreenBase extends Sprite
 {
 	var myBG:Sprite;
@@ -21,6 +26,12 @@ class MainScreenBase extends Sprite
 	var camera:CameraBase;
 
 	var joy1:JoystickMock;
+	
+	var TimeDisplay:TextChatter;
+	var CountDown:Timer;
+	var countTime:Int = 200;
+	
+	var gameRunning:Bool = true;
 	
 	public function new() 
 	{
@@ -58,18 +69,36 @@ class MainScreenBase extends Sprite
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		
 		
+		TimeDisplay = new TextChatter(10, 10);
+		TimeDisplay.StartUp();
+		TimeDisplay.sayText("yabadaba");
+		addChild(TimeDisplay);
 		
+		CountDown = new Timer(1000);
+		CountDown.addEventListener(TimerEvent.TIMER, onTick);
+		CountDown.start();
 		
+	}
+	
+	private function onTick(e:TimerEvent):Void 
+	{
+		if (gameRunning)
+		{
+			TimeDisplay.sayText(Std.string(countTime));
+			countTime--;
+		}
 	}
 	
 	private function onEnterFrame(e:Event):Void 
 	{
-		//trace("step");
-		fishStage.ControlMovement(joy1.getCurretDirection());
-		fishStage.GameStep();
-		var offsetToCamera = fishStage.camera.reportOffsetToMain();
-		fishStage.x = offsetToCamera.x*-1;
-		
+		if (gameRunning)
+		{
+			//trace("step");
+			fishStage.ControlMovement(joy1.getCurretDirection());
+			fishStage.GameStep();
+			var offsetToCamera = fishStage.camera.reportOffsetToMain();
+			fishStage.x = offsetToCamera.x*-1;
+		}
 		
 	}
 	

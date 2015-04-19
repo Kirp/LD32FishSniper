@@ -201,7 +201,7 @@ class PlayStageFishBase extends Sprite
 			
 			
 			//lets put the top part of the gate
-			var firstCutoff = 29 - jitterByBox;
+			var firstCutoff = 28 - jitterByBox;
 			var obstacle1 = new StaticObstacleBase(atPoint.x, 0, 1, firstCutoff);
 			obstacle1.StartUp();
 			addChild(obstacle1);
@@ -242,13 +242,11 @@ class PlayStageFishBase extends Sprite
 	
 	function checkIfFishIsOutOfBounds():Bool
 	{
-		if (!tools.checkIfPointInRectangle(bulletFish.getCenter, tempStageRect))
+		if (tools.checkIfPointInRectangle(bulletFish.getCenter(), tempStageRect)==false)
 		{
 			return true;
 		}
 		
-		return false;
-		return false;
 		return false;
 	}
 	
@@ -258,8 +256,8 @@ class PlayStageFishBase extends Sprite
 		
 		bulletFish.GameStep();
 		camera.followTarget();
-		fishDown = (checkIfFishIsHittingBarriers());
-		
+		fishDown = (checkIfFishIsHittingBarriers()||checkIfFishIsOutOfBounds());
+		//fishDown = checkIfFishIsOutOfBounds();
 		
 		if (fishDown)
 		{
@@ -284,11 +282,11 @@ class PlayStageFishBase extends Sprite
 	
 	public function shootFish():Void
 	{
-		if (bobBait.hasBite == false)
-		{
-			trace("no bite");
-			return;
-		}
+		//if (bobBait.hasBite == false)
+		//{
+			//trace("no bite");
+			//return;
+		//}
 		bulletFish.x = 50;
 		bulletFish.y = 300;
 		bulletFish.resetMe();

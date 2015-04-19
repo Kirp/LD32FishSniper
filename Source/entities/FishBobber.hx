@@ -50,8 +50,8 @@ class FishBobber extends Sprite
 	
 	public function bob()
 	{
-		if (hasBite == false)
-		{
+		//if (hasBite == false)
+		//{
 			if (initialState)
 			{
 				myPortrait.graphics.clear();
@@ -88,49 +88,49 @@ class FishBobber extends Sprite
 					myPortrait.graphics.endFill();
 					initialState = true;
 				}
-		}else
-			{
-				if (initialState)
-				{
-					myPortrait.graphics.clear();
-					myPortrait.graphics.beginFill(0xfffffff);
-					
-					myPortrait.graphics.drawRect(0, -5, 5, 5);
-					
-					myPortrait.graphics.drawRect(5, 0, 5, 5);
-					
-					myPortrait.graphics.drawRect(0, 5, 5, 5);
-					
-					myPortrait.graphics.drawRect( -5, 0, 5, 5);
-					
-					myPortrait.graphics.endFill();
-					initialState = false;
-					
-				}else
-					{
-						myPortrait.graphics.clear();
-						myPortrait.graphics.beginFill(0xfffffff);
-						
-						myPortrait.graphics.drawRect(0, -10, 5, 5);
-						
-						myPortrait.graphics.drawRect(5,-5, 5, 5);
-						
-						myPortrait.graphics.drawRect(10,0, 5, 5);
-						
-						myPortrait.graphics.drawRect( 5, 5, 5, 5);
-						
-						myPortrait.graphics.drawRect( 0, 10, 5, 5);
-						
-						myPortrait.graphics.drawRect( -5, 5, 5, 5);
-						
-						myPortrait.graphics.drawRect( -10, 0, 5, 5);
-						
-						myPortrait.graphics.drawRect( -5, -5, 5, 5);
-						
-						myPortrait.graphics.endFill();
-						initialState = true;
-					}
-			}
+		//}else
+			//{
+				//if (initialState)
+				//{
+					//myPortrait.graphics.clear();
+					//myPortrait.graphics.beginFill(0xfffffff);
+					//
+					//myPortrait.graphics.drawRect(0, -5, 5, 5);
+					//
+					//myPortrait.graphics.drawRect(5, 0, 5, 5);
+					//
+					//myPortrait.graphics.drawRect(0, 5, 5, 5);
+					//
+					//myPortrait.graphics.drawRect( -5, 0, 5, 5);
+					//
+					//myPortrait.graphics.endFill();
+					//initialState = false;
+					//
+				//}else
+					//{
+						//myPortrait.graphics.clear();
+						//myPortrait.graphics.beginFill(0xfffffff);
+						//
+						//myPortrait.graphics.drawRect(0, -10, 5, 5);
+						//
+						//myPortrait.graphics.drawRect(5,-5, 5, 5);
+						//
+						//myPortrait.graphics.drawRect(10,0, 5, 5);
+						//
+						//myPortrait.graphics.drawRect( 5, 5, 5, 5);
+						//
+						//myPortrait.graphics.drawRect( 0, 10, 5, 5);
+						//
+						//myPortrait.graphics.drawRect( -5, 5, 5, 5);
+						//
+						//myPortrait.graphics.drawRect( -10, 0, 5, 5);
+						//
+						//myPortrait.graphics.drawRect( -5, -5, 5, 5);
+						//
+						//myPortrait.graphics.endFill();
+						//initialState = true;
+					//}
+			//}
 	}
 	
 	public function disableBob()

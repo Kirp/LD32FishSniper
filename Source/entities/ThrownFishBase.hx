@@ -30,7 +30,7 @@ class ThrownFishBase extends Sprite
 	
 	public var currentAngleRadians:Float = 0;
 	
-	private var turnSpeed:Float = 0.1; 
+	private var turnSpeed:Float = 0.05; 
 	
 	public var isFlying:Bool = true;
 	
@@ -63,8 +63,8 @@ class ThrownFishBase extends Sprite
 		//myPortrait.graphics.endFill();
 		addChild(myPortrait);
 		
-		fish1 = new Bitmap(Assets.getBitmapData ("assets/pictures/fish1A.png"));
-		fish2 = new Bitmap(Assets.getBitmapData ("assets/pictures/fish1B.png"));
+		fish1 = new Bitmap(Assets.getBitmapData ("assets/pictures/fishG.png"));
+		fish2 = new Bitmap(Assets.getBitmapData ("assets/pictures/fishG.png"));
 		
 		
 		myPix = fish2;
