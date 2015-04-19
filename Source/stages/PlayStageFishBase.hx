@@ -133,7 +133,7 @@ class PlayStageFishBase extends Sprite
 		
 		//lets get our random target color
 		currentTargetType = getRandomTargetType();
-		trace("current target is type: "+currentTargetType);
+		//trace("current target is type: "+currentTargetType);
 		
 		
 		targetDisplayer = new TargetExplainer(100, 300, currentTargetType);
@@ -350,14 +350,14 @@ class PlayStageFishBase extends Sprite
 		{
 			if (checkIfGameOver.y == currentTargetType)
 			{
-				trace("Hitting correct target");
-				trace("you win!");
+				//trace("Hitting correct target");
+				//trace("you win!");
 				goalAchieved = true;
 				fishDown = true;
 				soundManager.playHitRight();
 				return;
 			}
-			trace("hitting a target but incorrect");
+			//trace("hitting a target but incorrect");
 			penalizeTime = true;
 			fishDown = true;
 		}

@@ -35,7 +35,7 @@ class TitleScreen extends Sprite
 		
 		var TitleText1:TextDisplay = new TextDisplay("THE  FISH  SNIPER  ", 200, 200, 50);
 		addChild(TitleText1);
-		trace(TitleText1.width);
+		//trace(TitleText1.width);
 		
 		var startPrompt:TextDisplay = new TextDisplay("press  Space  to  start", 260, 420, 25);
 		addChild(startPrompt);

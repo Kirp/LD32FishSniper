@@ -54,7 +54,7 @@ class MainScreenBase extends Sprite
 	{
 		removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 		
-		trace("GUI screen loaded");
+		//trace("GUI screen loaded");
 		
 		joy1 = new JoystickMock();
 		
@@ -109,7 +109,7 @@ class MainScreenBase extends Sprite
 				//lets end the game and call it a game over
 				//declare a game over here and stop the game
 				
-				trace("game over");
+				//trace("game over");
 				gameRunning = false;
 				NextScreen();
 				return;
@@ -118,7 +118,7 @@ class MainScreenBase extends Sprite
 			if (fishStage.goalAchieved)
 			{
 				gameRunning = false;
-				trace("declare a win!");
+				//trace("declare a win!");
 				NextScreen();
 				return;
 			}
@@ -185,7 +185,7 @@ class MainScreenBase extends Sprite
 		
 		if (e.keyCode == Keyboard.SPACE)
 		{
-			trace("fire");
+			//trace("fire");
 			if (gameRunning)
 			{
 				if (fishStage.fishDown)
