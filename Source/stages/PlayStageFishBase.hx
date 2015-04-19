@@ -8,6 +8,7 @@ import entities.TargetBase;
 import entities.ThrownFishBase;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
+import uiComponents.TargetExplainer;
 
 import obstacles.StaticObstacleBase;
 import openfl.geom.Point;
@@ -52,6 +53,7 @@ class PlayStageFishBase extends Sprite
 	private var RunGameLoop:Bool = false;
 	
 	private var obstacleList:Array<StaticObstacleBase>;
+	private var deadFishList:Array<SpentFishBase>;
 	
 	public var GameOver:Bool = false;
 	
@@ -63,6 +65,8 @@ class PlayStageFishBase extends Sprite
 	
 	public var goalAchieved:Bool = false;
 	public var penalizeTime:Bool = false;
+	
+	public var targetDisplayer:TargetExplainer;
 	
 	public function new() 
 	{
@@ -76,6 +80,7 @@ class PlayStageFishBase extends Sprite
 		tools = new Vtools();
 		obstacleList = [];
 		targetList = [];
+		deadFishList = [];
 		
 		
 		tempStageRect = new Rectangle(0,0, ConstantHolder.appWidth*mapLengthMultiplier, ConstantHolder.appHeight);
@@ -92,13 +97,13 @@ class PlayStageFishBase extends Sprite
 		addChild(stageBG);
 		
 		
-		player = new PlayerBase(100, 300);
-		addChild(player);
-		player.StartUp();
+		//player = new PlayerBase(100, 300);
+		//addChild(player);
+		//player.StartUp();
 		
-		target = new TargetBase(tempStageRect.width - 35, 300);
-		addChild(target);
-		target.StartUp();
+		//target = new TargetBase(tempStageRect.width - 35, 300);
+		//addChild(target);
+		//target.StartUp();
 		
 		
 		targetA = new TargetBase(tempStageRect.width - 35, 80,0);
@@ -122,6 +127,15 @@ class PlayStageFishBase extends Sprite
 		targetList.push(targetD);
 		
 		
+		//lets get our random target color
+		currentTargetType = getRandomTargetType();
+		trace("current target is type: "+currentTargetType);
+		
+		
+		targetDisplayer = new TargetExplainer(100, 300, currentTargetType);
+		targetDisplayer.StartUp();
+		addChild(targetDisplayer);
+		
 		
 		bobBait = new FishBobber(50,300);
 		bobBait.StartUp();
@@ -141,9 +155,6 @@ class PlayStageFishBase extends Sprite
 		//AddObstacles();
 		addObstaclesBySection();
 		
-		//lets get our random target color
-		currentTargetType = getRandomTargetType();
-		trace("current target is type: "+currentTargetType);
 		
 		//fishbaittimer
 		fishBiteRoller = new Timer(3000);
@@ -348,6 +359,7 @@ class PlayStageFishBase extends Sprite
 				bulletFish.hideAway();
 			}
 			camera.resetPosition();
+			targetDisplayer.visible = true;
 			if(bobBait.isEnabled==false)bobBait.enableBob();
 		}
 	}
@@ -358,6 +370,7 @@ class PlayStageFishBase extends Sprite
 		deadFish.StartUp();
 		//maybe add this alll later in an array for easy fixing
 		addChild(deadFish);
+		deadFishList.push(deadFish);
 	}
 	
 	public function shootFish():Void
@@ -375,6 +388,7 @@ class PlayStageFishBase extends Sprite
 		
 		bobBait.disableBob();
 		
+		targetDisplayer.visible = false;
 		//fishBiteRoller.stop();
 	}
 	
@@ -388,6 +402,18 @@ class PlayStageFishBase extends Sprite
 	
 	public function InitialGameStart()
 	{
+		
+	}
+	
+	public function ResetStage()
+	{
+		for (wall in obstacleList)
+		{
+			wall.destroy();
+		}
+		
+		obstacleList = [];
+		
 		
 	}
 	

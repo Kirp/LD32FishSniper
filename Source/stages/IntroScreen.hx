@@ -53,7 +53,7 @@ class IntroScreen extends Sprite
 		var text3:TextDisplay = new TextDisplay("Launch  Fishes  with  SPACEBAR", 100, 350, 25);
 		addChild(text3);
 		
-		var text4:TextDisplay = new TextDisplay("Turn  them  with  W  and  S keys", 100, 380, 25);
+		var text4:TextDisplay = new TextDisplay("Turn  them  with   W   and   S  keys", 100, 380, 25);
 		addChild(text4);
 		
 		var OwnerText:TextDisplay = new TextDisplay("press  SPACEBAR  to  continue", 10, ConstantHolder.appHeight - 20, 20);

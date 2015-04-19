@@ -37,4 +37,9 @@ class StaticObstacleBase extends Sprite
 	{
 		return new Rectangle(this.x, this.y, myHitbox.width, myHitbox.height);
 	}
+	
+	public function destroy()
+	{
+		myPortrait.graphics.clear();
+	}
 }

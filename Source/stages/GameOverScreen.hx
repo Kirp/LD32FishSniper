@@ -42,8 +42,8 @@ class GameOverScreen extends Sprite
 		addChild(TitleText1);
 		
 			
-		var OwnerText:TextDisplay = new TextDisplay("press  SPACEBAR  to  restart", 10, ConstantHolder.appHeight - 20, 20);
-		addChild(OwnerText);
+		//var OwnerText:TextDisplay = new TextDisplay("press  SPACEBAR  to  restart", 10, ConstantHolder.appHeight - 20, 20);
+		//addChild(OwnerText);
 		
 	}
 	

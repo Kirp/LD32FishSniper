@@ -32,9 +32,9 @@ class TargetBase extends Sprite
 	{
 		
 		myPortrait = new Sprite();
-		myPortrait.graphics.beginFill(0x00ff00);
-		myPortrait.graphics.drawRect(0,0,25,25);
-		myPortrait.graphics.endFill();
+		//myPortrait.graphics.beginFill(0x00ff00);
+		//myPortrait.graphics.drawRect(0,0,25,25);
+		//myPortrait.graphics.endFill();
 		addChild(myPortrait);
 		
 		myPix = getBitmapByType();

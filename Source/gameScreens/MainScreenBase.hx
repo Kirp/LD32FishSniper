@@ -71,6 +71,7 @@ class MainScreenBase extends Sprite
 		
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		
+		addChild(fishStage = new PlayStageFishBase());
 		
 		TimeDisplay = new TextChatter(10, 10);
 		TimeDisplay.StartUp();
@@ -124,11 +125,11 @@ class MainScreenBase extends Sprite
 			
 			if (fishStage.penalizeTime)
 			{
-				countTime -= 20;
+				//countTime -= 20;
 				
 			}
 			
-			var sayThis:String = Std.string(countTime)+ " Seconds";
+			var sayThis:String = Std.string(countTime)+ "  till  escape";
 			TimeDisplay.sayText(sayThis);
 			countTime--;
 		}
@@ -136,9 +137,16 @@ class MainScreenBase extends Sprite
 	
 	private function RunGame():Void
 	{
-		if (fishStage != null) fishStage = null;
+		gameRunning = true;
 		TimeDisplay.visible = true;
-		addChild(fishStage = new PlayStageFishBase());
+		fishStage.StartUp();
+		CountDown.start();
+	}
+	
+	private function ResetRunGame():Void
+	{
+		fishStage = new PlayStageFishBase();
+		TimeDisplay.visible = true;
 		fishStage.StartUp();
 		CountDown.start();
 	}
@@ -158,13 +166,13 @@ class MainScreenBase extends Sprite
 	
 	private function onKeyUp(e:KeyboardEvent):Void 
 	{
-		if (e.keyCode == Keyboard.W)
+		if (e.keyCode == Keyboard.W  || e.keyCode==Keyboard.UP)
 		{
 			//fishStage.ControlMovement(new Point(0, -1));
 			joy1.ReleasedTrigger(new Point(0,-1));
 		}
 		
-		if (e.keyCode == Keyboard.S)
+		if (e.keyCode == Keyboard.S  || e.keyCode==Keyboard.DOWN)
 		{
 			joy1.ReleasedTrigger(new Point(0,1));
 		}
@@ -173,15 +181,7 @@ class MainScreenBase extends Sprite
 	private function onKeyDown(e:KeyboardEvent):Void 
 	{
 		
-		if (e.keyCode == Keyboard.A)
-		{
-			//fishStage.x -= 10;
-		}
 		
-		if (e.keyCode == Keyboard.D)
-		{
-			//fishStage.x += 10;
-		}
 		
 		if (e.keyCode == Keyboard.SPACE)
 		{
@@ -202,13 +202,13 @@ class MainScreenBase extends Sprite
 					}
 		}
 		
-		if (e.keyCode == Keyboard.W)
+		if (e.keyCode == Keyboard.W  || e.keyCode==Keyboard.UP)
 		{
 			//fishStage.ControlMovement(new Point(0, -1));
 			joy1.PressedTrigger(new Point(0,-1));
 		}
 		
-		if (e.keyCode == Keyboard.S)
+		if (e.keyCode == Keyboard.S  || e.keyCode==Keyboard.DOWN)
 		{
 			joy1.PressedTrigger(new Point(0,1));
 		}
@@ -241,11 +241,11 @@ class MainScreenBase extends Sprite
 				
 			case 3:
 				
-				gameover.visible = false;
-				
-				RunGame();
-				gameState = 2;
-				countTime = 200;
+				//gameover.visible = false;
+				//
+				//ResetRunGame();
+				//gameState = 2;
+				//countTime = 200;
 				
 			default:
 				titleScreen.visible = false;
