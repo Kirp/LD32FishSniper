@@ -8,6 +8,7 @@ import entities.TargetBase;
 import entities.ThrownFishBase;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
+import sfxManager.SfxManager;
 import uiComponents.TargetExplainer;
 
 import obstacles.StaticObstacleBase;
@@ -68,6 +69,8 @@ class PlayStageFishBase extends Sprite
 	
 	public var targetDisplayer:TargetExplainer;
 	
+	private var soundManager:SfxManager;
+	
 	public function new() 
 	{
 		super();
@@ -82,6 +85,7 @@ class PlayStageFishBase extends Sprite
 		targetList = [];
 		deadFishList = [];
 		
+		soundManager = new SfxManager();
 		
 		tempStageRect = new Rectangle(0,0, ConstantHolder.appWidth*mapLengthMultiplier, ConstantHolder.appHeight);
 		
@@ -331,6 +335,13 @@ class PlayStageFishBase extends Sprite
 		
 		bulletFish.GameStep();
 		camera.followTarget();
+		var camHit = camera.returnHitBox();
+		
+		if (camHit.x + camHit.width > ConstantHolder.appWidth * mapLengthMultiplier)
+		{
+			camera.x = (ConstantHolder.appWidth * mapLengthMultiplier) - camHit.width;
+		}
+		
 		fishDown = (checkIfFishIsHittingBarriers()||checkIfFishIsOutOfBounds());
 		//fishDown = checkIfFishIsOutOfBounds();
 		
@@ -343,6 +354,7 @@ class PlayStageFishBase extends Sprite
 				trace("you win!");
 				goalAchieved = true;
 				fishDown = true;
+				soundManager.playHitRight();
 				return;
 			}
 			trace("hitting a target but incorrect");
@@ -360,7 +372,11 @@ class PlayStageFishBase extends Sprite
 			}
 			camera.resetPosition();
 			targetDisplayer.visible = true;
-			if(bobBait.isEnabled==false)bobBait.enableBob();
+			if (bobBait.isEnabled == false)
+			{
+				bobBait.enableBob();
+				soundManager.playHitWrong();
+			}
 		}
 	}
 	
@@ -389,6 +405,8 @@ class PlayStageFishBase extends Sprite
 		bobBait.disableBob();
 		
 		targetDisplayer.visible = false;
+		
+		soundManager.playLaunchSfx();
 		//fishBiteRoller.stop();
 	}
 	

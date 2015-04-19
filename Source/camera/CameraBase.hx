@@ -18,7 +18,7 @@ class CameraBase extends Sprite
 	
 	var startFollowing:Bool = false;
 	
-	var myHitbox:Rectangle;
+	public var myHitbox:Rectangle;
 
 	public function new(_x:Float, _y:Float) 
 	{
