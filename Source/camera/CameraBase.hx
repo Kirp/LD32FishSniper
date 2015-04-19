@@ -51,6 +51,14 @@ class CameraBase extends Sprite
 		startFollowing = true;
 	}
 	
+	public function resetPosition():Void
+	{
+		fishBulletToFollow = null;
+		startFollowing = false;
+		
+		this.x = 0;
+	}
+	
 	public function followTarget()
 	{
 		if (startFollowing == false || followTarget == null) return;

@@ -54,6 +54,11 @@ class ThrownFishBase extends Sprite
 		
 	}
 	
+	public function resetMe():Void
+	{
+		currentAngleRadians = 0;
+	}
+	
 	public function GameStep()
 	{
 		//trace("fish step");

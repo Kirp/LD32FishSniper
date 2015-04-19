@@ -1,9 +1,13 @@
 package stages;
 
 import camera.CameraBase;
+import entities.FishBobber;
 import entities.PlayerBase;
 import entities.TargetBase;
 import entities.ThrownFishBase;
+import openfl.events.TimerEvent;
+import openfl.utils.Timer;
+
 import obstacles.StaticObstacleBase;
 import openfl.geom.Point;
 import usables.Vtools;
@@ -24,8 +28,12 @@ class PlayStageFishBase extends Sprite
 
 	private var tempStageRect:Rectangle;
 	
+	private var mapLengthMultiplier:Float = 3;
+	
 	private var player:PlayerBase; 
 	private var target:TargetBase;
+	
+	private var bobBait:FishBobber;
 	
 	private var bulletFish:ThrownFishBase;
 	
@@ -35,7 +43,12 @@ class PlayStageFishBase extends Sprite
 	
 	private var obstacleList:Array<StaticObstacleBase>;
 	
-	private var GameOver:Bool = false;
+	public var GameOver:Bool = false;
+	
+	public var fishDown:Bool = true;
+	
+	
+	private var fishBiteRoller:Timer;
 	
 	public function new() 
 	{
@@ -50,12 +63,15 @@ class PlayStageFishBase extends Sprite
 		obstacleList = [];
 		
 		
-		tempStageRect = new Rectangle(0,0, ConstantHolder.appWidth*3, ConstantHolder.appHeight);
+		tempStageRect = new Rectangle(0,0, ConstantHolder.appWidth*mapLengthMultiplier, ConstantHolder.appHeight);
 		
 		
 		stageBG = new Sprite();
 		stageBG.graphics.beginFill(0xffffff);
 		stageBG.graphics.drawRect(tempStageRect.x, tempStageRect.y, tempStageRect.width, tempStageRect.height);
+		stageBG.graphics.endFill();
+		stageBG.graphics.beginFill(0x0011ff);
+		stageBG.graphics.drawRect(tempStageRect.x, tempStageRect.y, 95, tempStageRect.height);
 		stageBG.graphics.endFill();
 		
 		addChild(stageBG);
@@ -69,7 +85,11 @@ class PlayStageFishBase extends Sprite
 		addChild(target);
 		target.StartUp();
 		
-		bulletFish = new ThrownFishBase(20, 300);
+		bobBait = new FishBobber(50,300);
+		bobBait.StartUp();
+		addChild(bobBait);
+		
+		bulletFish = new ThrownFishBase(-200, 300);
 		addChild(bulletFish);
 		bulletFish.StartUp();
 		
@@ -80,7 +100,41 @@ class PlayStageFishBase extends Sprite
 		
 		RunGameLoop = true;
 		
-		AddObstacles();
+		//AddObstacles();
+		addObstaclesBySection();
+		
+		
+		//fishbaittimer
+		fishBiteRoller = new Timer(3000);
+		fishBiteRoller.addEventListener(TimerEvent.TIMER, onBiteTick);
+		fishBiteRoller.start();
+	}
+	
+	private function onBiteTick(e:TimerEvent):Void 
+	{
+		if (bobBait == null && bobBait.isEnabled==false) return;
+		
+		if (bobBait.hasBite == false)
+		{
+			if (isFishBiting()) bobBait.hasBite = true;
+		}else
+			{
+				var roll = Math.random();
+				if (roll > 0.75)
+				{
+					bobBait.hasBite = false;
+				}
+			}
+		
+	}
+	
+	private function isFishBiting():Bool
+	{
+		var fishBitePercentage:Float = 0.5;
+		var roll = Math.random();
+		if (roll < fishBitePercentage) return true;
+		
+		return false;
 	}
 	
 	function AddObstacles() 
@@ -115,6 +169,48 @@ class PlayStageFishBase extends Sprite
 		//addChild(obstacle1);
 	}
 	
+	function addObstaclesBySection():Void
+	{
+		//initial computations
+		var endBuffers:Float = 400;
+		var ObstacleAreaLength:Float = ConstantHolder.appWidth * mapLengthMultiplier - endBuffers * 2;
+		var numberOfObstaclesThatCanFit:Int = Math.floor(ObstacleAreaLength / (ConstantHolder.tileArea * 5));
+		
+		
+		var currentGatePoint:Point = new Point(400, 300);
+		for (i in 0...numberOfObstaclesThatCanFit)
+		{
+			
+			//lets have more variations of this later
+			addGateObstacle(currentGatePoint);
+			
+			currentGatePoint.x += ConstantHolder.tileArea * 5;
+		}
+		
+		
+	}
+	
+	function addGateObstacle(atPoint:Point)
+	{
+		//first lets move the gate by a few blocks
+			var jitterByBox = getRandomNumberBetween(1, 29);
+			
+			
+			//lets put the top part of the gate
+			var firstCutoff = 29 - jitterByBox;
+			var obstacle1 = new StaticObstacleBase(atPoint.x, 0, 1, firstCutoff);
+			obstacle1.StartUp();
+			addChild(obstacle1);
+			obstacleList.push(obstacle1);
+			
+			
+			var firstPasteOn = firstCutoff + 4;
+			var obstacle2 = new StaticObstacleBase(atPoint.x, firstPasteOn*ConstantHolder.tileArea, 1, 30 - firstPasteOn);
+			obstacle2.StartUp();
+			addChild(obstacle2);
+			obstacleList.push(obstacle2);
+	}
+	
 	function getRandomNumberBetween(min:Float, max:Float):Float
 	{
 		var rolled:Float = Math.round((Math.random() * max + min) - min);
@@ -142,11 +238,34 @@ class PlayStageFishBase extends Sprite
 	
 	public function GameStep()
 	{
-		if (GameOver) return;
+		if (fishDown) return;
 		
 		bulletFish.GameStep();
 		camera.followTarget();
-		GameOver = (checkIfFishIsHittingBarriers());
+		fishDown = (checkIfFishIsHittingBarriers());
+		
+		
+		if (fishDown)
+		{
+			camera.resetPosition();
+			if(bobBait.isEnabled==false)bobBait.enableBob();
+		}
+	}
+	
+	public function shootFish():Void
+	{
+		if (bobBait.hasBite == false)
+		{
+			trace("no bite");
+			return;
+		}
+		bulletFish.x = 50;
+		bulletFish.y = 300;
+		bulletFish.resetMe();
+		camera.setTarget(bulletFish);
+		fishDown = false;
+		
+		bobBait.disableBob();
 	}
 	
 	public function ControlMovement(toControl:Point)

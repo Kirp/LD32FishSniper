@@ -102,6 +102,10 @@ class MainScreenBase extends Sprite
 		if (e.keyCode == Keyboard.SPACE)
 		{
 			trace("fire");
+			if (fishStage.fishDown)
+			{
+				fishStage.shootFish();
+			}
 		}
 		
 		if (e.keyCode == Keyboard.W)
